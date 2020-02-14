@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madding</title>
+    <style>
+        table,td,th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+        table{
+            margin: 0 auto;
+            text-align: center;   
+        }
+        h1,h2,h3{
+            text-align: center;
+        }
+    </style>
+    
+</head>
+<body id='body1'>
+    <center id='center'>
+        <h1>Madding</h1>
+        Username: <input type="text" id="nama"><br><br>
+        Password: <input type="password" id="password"> <br><br>
+        <button onclick="login()">Login</button> &nbsp; <button onclick="register()">Register</button>
+    </center>
+    <h3 id="h3"></h3>
+</body>
+</html>
+
+
+
+
+
+<script>
+    class listdata{
+        constructor(user,password,role){
+            this.user=user
+            this.password=password
+            this.role=role
+        }
+    }
+
+var listpemakai=[
+    new listdata('admin','admin','admin'),
+    new listdata('william','william','user')
+]
+
+
+class listadmin{
+    constructor(kegiatan,hari,poster){
+        this.kegiatan=kegiatan
+        this.hari=hari
+        this.poster=poster
+    }
+}
+
+var listkegiatan=[
+    new listadmin('lari','senin','inputgambar'),
+    new listadmin('estafet','selasa','inputgambar')
+]
+
+const login=()=>{
+    var name=document.getElementById('nama').value
+    var pass=document.getElementById('password').value
+    listpemakai.forEach((val,index)=>{
+        if(val.user==name && val.password==pass){
+            if(val.role=='user'){
+            alert(`Welcome ${val.user}`)
+            tablebaranguser()
+            } else if(val.role=='admin'){
+            alert(`Hello ${val.user}`)
+            tablebarangadmin()        
+        } 
+    }
+}
+)
+}
+
+const logout=()=>{
+   document.getElementById('body1').innerHTML=`<center id='center'>
+        <h1>Madding</h1>
+        Username: <input type="text" id="nama"><br><br>
+        Password: <input type="password" id="password"> <br><br>
+        <button onclick="login()">Login</button> &nbsp; <button onclick="register()">Register</button>
+    </center>`
+}
+
+const tablebaranguser=()=>{    
+              var tableU=``
+              tableU+=`
+              <table>
+                <thead>
+                <tr>
+                 <td>No</td>
+                <td>Kegiatan</td>
+                <td>Hari</td>
+                <td>Poster</td>
+                <td>Act</td>
+                </tr>
+            </thead>
+            <tbody id='tbody1'>
+            </tbody>
+            </table>
+            <br>
+            <center>
+            <button onclick='logout()'>Logout</button>
+            </center>
+            `
+            document.getElementById('body1').innerHTML=tableU
+            var tbluser=''
+            listkegiatan.forEach((val1,index1)=>{
+        tbluser+=`
+        <tr>
+            <td>${index1+1}</td>
+            <td>${val1.kegiatan}</td>
+            <td>${val1.hari}</td>
+            <td><image src=${val1.gambar} alt=${index1} height='200px'></td>
+        </tr>
+        `
+        document.getElementById('tbody1').innerHTML=tbluser
+             }
+             )  
+            }
+
+const tablebarangadmin=()=>{
+    var tableadmin=``
+    tableadmin+=`
+              <table>
+                <thead>
+            <tr>
+                <td>No</td>
+                <td>Kegiatan</td>
+                <td>Hari</td>
+                <td>Poster</td>
+                <td>Act</td>
+            </tr>
+            </thead>
+            <tbody id='tbody1'>
+            </tbody>
+            <tfoot id='tfoot1'>
+            </tfoot>
+            </table>
+            <br>
+            <center>
+            <h1 id="h1"></h1>
+                <br>
+            <button onclick='logout()'>Logout</button>
+            </center>
+            `
+            document.getElementById('body1').innerHTML=tableadmin
+
+            var tbladmin=''
+            listkegiatan.forEach((val1,index1)=>{
+                if(index1==indexedit){
+            tbladmin+=
+            `
+        <tr>
+        <td>${index1+1}</td>
+        <td><input type='text' id='editkegiatan' value=${listkegiatan[index1].kegiatan}></td>
+        <td>
+                                <select id="edithari" >
+                                    <option hidden value="">pilih hari ..</option>
+                                    <option value="senin">senin</option>
+                                    <option value="selasa">selasa</option>
+                                    <option value="rabu">rabu</option>
+                                    <option value="kamis">kamis</option>
+                                    <option value="jumat">jumat</option>
+                                    <option value="sabtu">sabtu</option>
+                                    <option value="minggu">minggu</option>
+                                </select>
+                            
+                            </td>
+        <td><input type='text' id='editgambar' value=${listkegiatan[index1].poster}></td>
+        <td>
+            <button onclick='save(${index1})'>save</button>
+            <button onclick='cancel(${index1})'>cancel</button>    
+        </td>
+    </tr>
+    `
+        }else{
+        tbladmin+=`
+        <tr>
+            <td>${index1+1}</td>
+            <td>${val1.kegiatan}</td>
+            <td>${val1.hari}</td>
+            <td><image src=${val1.gambar} alt=${index1} height='200px'></td>
+            <td>
+                <button onclick='deletekegiatan(${index1})'>Delete</button>
+                <button onclick='edit(${index1})'>Edit</button>
+            </td>
+        </tr>
+        `
+    }
+        document.getElementById('tbody1').innerHTML=tbladmin
+
+        var inputbarang=`
+            <tr>
+                <td></td>
+                <td><input type="text" placeholder="masukan nama kegiatan" id="inputkegiatan"></td>
+                <td>
+                                <select id="inputhari" >
+                                    <option hidden value="">pilih hari ..</option>
+                                    <option value="senin">senin</option>
+                                    <option value="selasa">selasa</option>
+                                    <option value="rabu">rabu</option>
+                                    <option value="kamis">kamis</option>
+                                    <option value="jumat">jumat</option>
+                                    <option value="sabtu">sabtu</option>
+                                    <option value="minggu">minggu</option>
+                                </select>
+                            
+                            </td>
+                <td><input type="text" placeholder="masukan gambar barang" id="inputgambar"></td>
+                <td><button onclick='inputdatabarang()'>Tambah Barang</button></td>
+            </tr>  
+        `
+        document.getElementById('tfoot1').innerHTML=inputbarang
+             }
+             )  
+}
+
+const inputdatabarang=()=>{
+    var newkegiatan=document.getElementById('inputkegiatan').value
+    var newhari=document.getElementById('inputhari').value
+    var newgambar=document.getElementById('inputgambar').value
+
+
+    if(newkegiatan=='' || newhari=='' || newgambar==''){
+        alert('mohon input semua ya')
+    }else{
+    listkegiatan.push(new listadmin(newkegiatan,newhari,newgambar))
+    document.getElementById('inputkegiatan').value=''
+    document.getElementById('inputhari').value=''
+    document.getElementById('inputgambar').value=''
+    tablebarangadmin()
+    }
+}
+
+const deletekegiatan=(index)=>{
+   var konfirmasi=confirm(`anda yakin ingin menghapus ${listkegiatan[index].kegiatan}`)
+    if(konfirmasi){listkegiatan.splice(index, 1)
+    tablebarangadmin()
+    }else{
+        tablebarangadmin()
+    }
+}
+
+var indexedit=-1
+const edit=(param)=>{
+    indexedit=param
+    tablebarangadmin()
+}
+
+const save=(param)=>{
+    var newkegiatan=document.getElementById('editkegiatan').value
+    var newhari=document.getElementById('edithari').value
+    var newgambar=document.getElementById('editgambar').value
+    if(newkegiatan==''){
+        newbarang=listkegiatan[param].kegiatan
+    }
+    if(newhari==''){
+        newgambar=listkegiatan[param].hari
+    }
+    if(newgambar==''){
+        newharga=listkegiatan[param].poster
+    }
+    indexedit=-1
+    listkegiatan.splice(param, 1 , new listadmin(newkegiatan,newhari,newgambar))
+    tablebarangadmin()
+}
+
+const cancel=(param)=>{
+    indexedit=-1
+    tablebarangadmin()
+}
+
+const register=()=>{
+    var nama=document.getElementById('nama').value
+    var password=document.getElementById('password').value
+    var role='user'
+    for(i=0;i<listpemakai.length;i++){
+        if(nama==listpemakai[i].user){
+             return alert('username sudah dipakai')
+        }else{
+           listpemakai.push(new listdata(nama,password,role))
+          return alert('anda berhasil register')
+        }
+    }
+}
+</script>
